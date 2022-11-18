@@ -4,17 +4,13 @@
 #include <QTextStream>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsView>
+#include "rect.h"
 
 
 int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
-
-
-
-
-
 
     //create a scene
     QGraphicsScene *scene=new QGraphicsScene;
@@ -32,13 +28,15 @@ int main(int argc, char *argv[])
     int boardData[12][12];
     QString temp;
     for (int i = 0; i < 12; i++){
-
             for (int j = 0; j < 12; j++)
             {
                 stream >> temp;
                 boardData[i][j] = temp.toInt();
             }
     }
+
+
+
 
 
 
@@ -86,6 +84,19 @@ int main(int argc, char *argv[])
     vertical_noborder_right=vertical_noborder_right.scaledToWidth(30);
     vertical_noborder_right=vertical_noborder_right.scaledToHeight(50);
 
+    QPixmap north_noborder("A:\\Development\\C++ - CS 2\\CS2-Project\\CS2-Project\\images\\noborder-north.png");
+    north_noborder=north_noborder.scaledToWidth(50);
+    north_noborder=north_noborder.scaledToHeight(50);
+
+    QPixmap south_noborder("A:\\Development\\C++ - CS 2\\CS2-Project\\CS2-Project\\images\\noborder-south.png");
+    south_noborder=south_noborder.scaledToWidth(50);
+    south_noborder=south_noborder.scaledToHeight(50);
+
+    QPixmap square("A:\\Development\\C++ - CS 2\\CS2-Project\\CS2-Project\\images\\square.png");
+    square=square.scaledToWidth(50);
+    square=square.scaledToHeight(50);
+
+
 
 
 
@@ -108,21 +119,21 @@ int main(int argc, char *argv[])
                else if (boardData[i][j] == -1)
                    boardItems[i][j].setPixmap(obstacle1);
 
-               else if (boardData [i][j]>0 && boardData[i][j]<9)
+               else if (boardData [i][j]>0 && boardData[i][j]<10)
                    boardItems[i][j].setPixmap(road_h);
-               else if (boardData [i][j]>26 && boardData[i][j]<35)
+               else if (boardData [i][j]>26 && boardData[i][j]<36)
                    boardItems[i][j].setPixmap(road_h);
-               else if (boardData [i][j]>48 && boardData[i][j]<57)
+               else if (boardData [i][j]>48 && boardData[i][j]<58)
                    boardItems[i][j].setPixmap(road_h);
 
                else
                    boardItems[i][j].setPixmap(walk);
 
                // Set Position
-               boardItems[i][j].setPos(50 + j * 50, 50 + i * 50);
+               //boardItems[i][j].setPos(50 + j * 50, 50 + i * 50);
 
                // Add to the Scene
-               scene->addItem(&boardItems[i][j]);
+               //scene->addItem(&boardItems[i][j]);
            }
     for (int i=2; i<10; i++){
         boardItems[i][1].setPixmap(vertical);
@@ -143,14 +154,30 @@ int main(int argc, char *argv[])
     boardItems[10][1].setPixmap(leftdown);
     boardItems[6][1].setPixmap(vertical_noborder);
     boardItems[6][10].setPixmap(vertical_noborder_right);
+    boardItems[1][4].setPixmap(north_noborder);
+    boardItems[1][7].setPixmap(north_noborder);
+    boardItems[10][7].setPixmap(south_noborder);
+    boardItems[10][4].setPixmap(south_noborder);
+    boardItems[6][4].setPixmap(square);
+    boardItems[6][7].setPixmap(square);
+    //boardItems[6][6].setPixmap(*r);
 
-    //Enemy e(boardData);
-
-    //boardItems[10][1].setPixmap(e.image);
-
-
+    for (int i = 0; i < 12; i++)
+           for (int j = 0; j < 12; j++)
+           {
 
 
+               // Set Position
+               boardItems[i][j].setPos(50 + j * 50, 50 + i * 50);
+
+               // Add to the Scene
+               scene->addItem(&boardItems[i][j]);
+           }
+
+    rect r(boardData);
+    scene->addItem(&r);
+    r.setFlag(QGraphicsPixmapItem::ItemIsFocusable);
+    r.setFocus();
 
 
 
@@ -158,7 +185,6 @@ int main(int argc, char *argv[])
     view->setScene(scene);
     view->show();
 
-
-
     return a.exec();
+
 }
